@@ -8654,7 +8654,7 @@ namespace MagneticField
                         if (double.TryParse(ptcm._coilconstant, out double coilConstant) && coilConstant != 0)
                         {
                             double changedCurrent = (double)num / coilConstant;
-                            if (comboBox_21_7.Text.Contains("-")) changedCurrent = -changedCurrent;
+                            //if (comboBox_21_7.Text.Contains("-")) changedCurrent = -changedCurrent;
 
                             textBox_21_8_1.Text = changedCurrent.ToString();
                             //textBox_21_8_1_Leave(textBox_21_8_1, EventArgs.Empty);
@@ -8702,8 +8702,7 @@ namespace MagneticField
                         if (double.TryParse(ptcm._coilconstant, out double coilConstant) && coilConstant != 0)
                         {
                             double changedCurrent = (double)num / coilConstant;
-                            if (comboBox_21_8.Text.Contains("-")) changedCurrent = -changedCurrent;
-
+                            //if (comboBox_21_8.Text.Contains("-")) changedCurrent = -changedCurrent;
                             textBox_21_8_2.Text = changedCurrent.ToString();
                             //textBox_21_8_2_Leave(textBox_21_8_2, EventArgs.Empty);
                             var args = new KeyEventArgs(Keys.Enter);
@@ -8750,7 +8749,7 @@ namespace MagneticField
                         if (double.TryParse(ptcm._coilconstant, out double coilConstant) && coilConstant != 0)
                         {
                             double changedCurrent = (double)num / coilConstant;
-                            if (comboBox_21_9.Text.Contains("-")) changedCurrent = -changedCurrent;
+                            //if (comboBox_21_9.Text.Contains("-")) changedCurrent = -changedCurrent;
 
                             textBox_21_8_3.Text = changedCurrent.ToString();
                             //textBox_21_8_3_Leave(textBox_21_8_3, EventArgs.Empty);
