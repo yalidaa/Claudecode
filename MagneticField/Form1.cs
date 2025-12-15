@@ -112,7 +112,6 @@ namespace MagneticField
             this.button_12_003 = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.circularGauge1 = new MagneticField.CircularGauge();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.textBox_11_3 = new System.Windows.Forms.TextBox();
@@ -478,7 +477,6 @@ namespace MagneticField
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.comboBox_4_1 = new System.Windows.Forms.ComboBox();
             this.label_4_1 = new System.Windows.Forms.Label();
-            this.circularGauge2 = new MagneticField.CircularGauge();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tabControl5 = new System.Windows.Forms.TabControl();
@@ -553,6 +551,8 @@ namespace MagneticField
             this.label103 = new System.Windows.Forms.Label();
             this.label102 = new System.Windows.Forms.Label();
             this.textBox_62_1_1 = new System.Windows.Forms.TextBox();
+            this.circularGauge1 = new MagneticField.CircularGauge();
+            this.circularGauge2 = new MagneticField.CircularGauge();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox21.SuspendLayout();
@@ -904,14 +904,6 @@ namespace MagneticField
             this.pictureBox11.Size = new System.Drawing.Size(20, 20);
             this.pictureBox11.TabIndex = 2;
             this.pictureBox11.TabStop = false;
-            // 
-            // circularGauge1
-            // 
-            this.circularGauge1.CurrentAngle = 0F;
-            this.circularGauge1.Location = new System.Drawing.Point(616, 0);
-            this.circularGauge1.Name = "circularGauge1";
-            this.circularGauge1.Size = new System.Drawing.Size(250, 250);
-            this.circularGauge1.TabIndex = 1;
             // 
             // dataGridView1
             // 
@@ -4894,7 +4886,7 @@ namespace MagneticField
             this.comboBox_4_1.Name = "comboBox_4_1";
             this.comboBox_4_1.Size = new System.Drawing.Size(140, 32);
             this.comboBox_4_1.TabIndex = 4;
-            this.comboBox_4_1.Text = "Dev0";
+            this.comboBox_4_1.Text = "Dev1";
             // 
             // label_4_1
             // 
@@ -4904,14 +4896,6 @@ namespace MagneticField
             this.label_4_1.Size = new System.Drawing.Size(58, 24);
             this.label_4_1.TabIndex = 3;
             this.label_4_1.Text = "Dev:";
-            // 
-            // circularGauge2
-            // 
-            this.circularGauge2.CurrentAngle = 0F;
-            this.circularGauge2.Location = new System.Drawing.Point(279, 115);
-            this.circularGauge2.Name = "circularGauge2";
-            this.circularGauge2.Size = new System.Drawing.Size(500, 500);
-            this.circularGauge2.TabIndex = 2;
             // 
             // tabPage5
             // 
@@ -5702,6 +5686,22 @@ namespace MagneticField
             this.textBox_62_1_1.Size = new System.Drawing.Size(140, 35);
             this.textBox_62_1_1.TabIndex = 0;
             this.textBox_62_1_1.Text = "192.168.0.10";
+            // 
+            // circularGauge1
+            // 
+            this.circularGauge1.CurrentAngle = 0F;
+            this.circularGauge1.Location = new System.Drawing.Point(616, 0);
+            this.circularGauge1.Name = "circularGauge1";
+            this.circularGauge1.Size = new System.Drawing.Size(250, 250);
+            this.circularGauge1.TabIndex = 1;
+            // 
+            // circularGauge2
+            // 
+            this.circularGauge2.CurrentAngle = 0F;
+            this.circularGauge2.Location = new System.Drawing.Point(279, 115);
+            this.circularGauge2.Name = "circularGauge2";
+            this.circularGauge2.Size = new System.Drawing.Size(500, 500);
+            this.circularGauge2.TabIndex = 2;
             // 
             // Form1
             // 
@@ -7484,6 +7484,7 @@ namespace MagneticField
             }
             else if (tabControl11.SelectedIndex == 1) // 角度触发模式
             {
+                isAngleTriggerMode = true;
                 _initialAngleS = (int)numericUpDown11.Value;
                 _stepAngleR = (int)numericUpDown12.Value;
                 _recordCountN = (int)numericUpDown13.Value;
@@ -8783,11 +8784,27 @@ namespace MagneticField
                     formsPlot2.Focus();
                     return;
                 }
+
+                if (!double.TryParse(textBox_21_8_1.Text, out double current))
+                {
+                    MessageBox.Show("请输入有效的电流值。");
+                    formsPlot2.Focus();
+                    return;
+                }
+
+                // 取绝对值，并根据ComboBox的符号决定正负
+                current = Math.Abs(current);
+                if (comboBox_21_7.Text.Contains("-"))
+                {
+                    current = -current;
+                }
+
                 string textxyz = comboBox_21_7.Text.Replace("-", "");
                 PowerTcpClientManager ptcm = PowerTcpFind(textxyz);
                 if (ptcm != null)
                 {
-                    ptcm.SendCommand("CURR " + textBox_21_8_1.Text + "\n");
+                    //ptcm.SendCommand("CURR " + textBox_21_8_1.Text + "\n");
+                    ptcm.SendCommand("CURR " + current.ToString() + "\n");
                 }
                 else
                 {
@@ -8806,11 +8823,27 @@ namespace MagneticField
                     formsPlot2.Focus();
                     return;
                 }
+
+                if (!double.TryParse(textBox_21_8_2.Text, out double current))
+                {
+                    MessageBox.Show("请输入有效的电流值。");
+                    formsPlot2.Focus();
+                    return;
+                }
+
+                // 取绝对值，并根据ComboBox的符号决定正负
+                current = Math.Abs(current);
+                if (comboBox_21_8.Text.Contains("-"))
+                {
+                    current = -current;
+                }
+
                 string textxyz = comboBox_21_8.Text.Replace("-", "");
                 PowerTcpClientManager ptcm = PowerTcpFind(textxyz);
                 if (ptcm != null)
                 {
-                    ptcm.SendCommand("CURR " + textBox_21_8_2.Text + "\n");
+                    //ptcm.SendCommand("CURR " + textBox_21_8_2.Text + "\n");
+                    ptcm.SendCommand("CURR " + current.ToString() + "\n");
                 }
                 else
                 {
@@ -8829,11 +8862,27 @@ namespace MagneticField
                     formsPlot2.Focus();
                     return;
                 }
+
+                if (!double.TryParse(textBox_21_8_3.Text, out double current))
+                {
+                    MessageBox.Show("请输入有效的电流值。");
+                    formsPlot2.Focus();
+                    return;
+                }
+
+                // 取绝对值，并根据ComboBox的符号决定正负
+                current = Math.Abs(current);
+                if (comboBox_21_9.Text.Contains("-"))
+                {
+                    current = -current;
+                }
+
                 string textxyz = comboBox_21_9.Text.Replace("-", "");
                 PowerTcpClientManager ptcm = PowerTcpFind(textxyz);
                 if (ptcm != null)
                 {
-                    ptcm.SendCommand("CURR " + textBox_21_8_3.Text + "\n");
+                    //ptcm.SendCommand("CURR " + textBox_21_8_3.Text + "\n");
+                    ptcm.SendCommand("CURR " + current.ToString() + "\n");
                 }
                 else
                 {
